@@ -35,7 +35,7 @@
 }
 
 -(void)updateState{
-    NSLog(@"--- %luzd",(unsigned long)self.downloader.state);
+//    NSLog(@"--- %luzd",(unsigned long)self.downloader.state);
 }
 
 
@@ -47,8 +47,24 @@
 
 
 - (IBAction)download:(id)sender {
-    NSURL * url = [NSURL URLWithString:@"http://free2.macx.cn:8281/tools/photo/SnapNDragPro418.dmg"];
-    [self.downloader dowbloader: url];
+    NSURL * url = [NSURL URLWithString:@"https://codeload.github.com/Cstzhang/HXJTG/zip/master"];
+    //[self.downloader dowbloader: url];
+    [self.downloader dowbloader:url downloadInfo:^(long long totalSize) {
+        NSLog(@"下载信息 %lld",totalSize);
+    } progress:^(float progress) {
+        NSLog(@"下载进度 %f",progress);
+    } success:^(NSString *filePath) {
+        NSLog(@"下载成功 %@",filePath);
+    } failed:^{
+        NSLog(@"下载失败");
+    }];
+    
+    [self.downloader setStateChange:^(ZBDownLoaderState state) {
+        
+         NSLog(@"----  %zd",state);
+        
+    }];
+    
     
 }
 - (IBAction)pause:(id)sender {
