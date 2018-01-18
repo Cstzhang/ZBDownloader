@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "ZBDownloader.h"
+#import "ZBDownloaderManager.h"
 @interface ViewController ()
 /** 下载器 */
 @property (nonatomic,strong) ZBDownloader *downloader;
@@ -46,24 +47,29 @@
 
 
 
-- (IBAction)download:(id)sender {
-    NSURL * url = [NSURL URLWithString:@"https://codeload.github.com/Cstzhang/HXJTG/zip/master"];
-    //[self.downloader dowbloader: url];
-    [self.downloader dowbloader:url downloadInfo:^(long long totalSize) {
-        NSLog(@"下载信息 %lld",totalSize);
+- (IBAction)download:(id)sender { 
+    NSURL * url = [NSURL URLWithString:@"https://codeload.github.com/Cstzhang/Leetcode/zip/master"];
+//    NSURL * url2 = [NSURL URLWithString:@"https://codeload.github.com/Cstzhang/Leetcode/zip/Release"];
+    [[ZBDownloaderManager shareInstance] dowbloader:url downloadInfo:^(long long totalSize) {
+       NSLog(@"下载信息 %lld",totalSize);
     } progress:^(float progress) {
-        NSLog(@"下载进度 %f",progress);
-    } success:^(NSString *filePath) {
-        NSLog(@"下载成功 %@",filePath);
+         NSLog(@"下载进度 %f",progress);
+    } success:^(NSString *cacheFilePath) {
+          NSLog(@"下载成功 %@",cacheFilePath);
     } failed:^{
-        NSLog(@"下载失败");
+          NSLog(@"下载失败");
     }];
     
-    [self.downloader setStateChange:^(ZBDownLoaderState state) {
-        
-         NSLog(@"----  %zd",state);
-        
-    }];
+//    [[ZBDownloaderManager shareInstance] dowbloader:url2 downloadInfo:^(long long totalSize) {
+//        NSLog(@"下载信息 %lld",totalSize);
+//    } progress:^(float progress) {
+//        NSLog(@"下载进度 %f",progress);
+//    } success:^(NSString *cacheFilePath) {
+//        NSLog(@"下载成功 %@",cacheFilePath);
+//    } failed:^{
+//        NSLog(@"下载失败");
+//    }];
+    
     
     
 }

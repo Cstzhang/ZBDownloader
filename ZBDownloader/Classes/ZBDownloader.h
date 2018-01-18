@@ -28,7 +28,11 @@ typedef void(^StateChangeBlockType)(ZBDownLoaderState state);
 
 //一个下载器对应一个下载任务 一个 dowbloader->url
 @interface ZBDownloader : NSObject
-
+/**
+ 下载文件
+ 
+ @param url 文件url
+ */
 - (void)dowbloader:(NSURL *)url ;
 /**
  下载文件
@@ -55,6 +59,11 @@ typedef void(^StateChangeBlockType)(ZBDownLoaderState state);
  取消并清除缓存
  */
 - (void)cancelTaskAndCleanCache;
+
+/**
+ 恢复继续下载状态 (调用了几次暂停,就需要调用几次继续才可以继续)
+ */
+- (void)resumeCurrentTask;
 
 /// 数据部分
 

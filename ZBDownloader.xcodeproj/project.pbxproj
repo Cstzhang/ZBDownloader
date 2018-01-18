@@ -15,6 +15,8 @@
 		E048512C200DA861008D6865 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E048512B200DA861008D6865 /* main.m */; };
 		E0485135200DD1B6008D6865 /* ZBDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = E0485134200DD1B6008D6865 /* ZBDownloader.m */; };
 		E0485138200DD809008D6865 /* ZBFileTool.m in Sources */ = {isa = PBXBuildFile; fileRef = E0485137200DD809008D6865 /* ZBFileTool.m */; };
+		E066C8AF20107D3B004758F2 /* ZBDownloaderManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E066C8AE20107D3B004758F2 /* ZBDownloaderManager.m */; };
+		E066C8B220108731004758F2 /* NSString+ZB.m in Sources */ = {isa = PBXBuildFile; fileRef = E066C8B120108731004758F2 /* NSString+ZB.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +34,10 @@
 		E0485134200DD1B6008D6865 /* ZBDownloader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZBDownloader.m; sourceTree = "<group>"; };
 		E0485136200DD809008D6865 /* ZBFileTool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZBFileTool.h; sourceTree = "<group>"; };
 		E0485137200DD809008D6865 /* ZBFileTool.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZBFileTool.m; sourceTree = "<group>"; };
+		E066C8AD20107D3B004758F2 /* ZBDownloaderManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZBDownloaderManager.h; sourceTree = "<group>"; };
+		E066C8AE20107D3B004758F2 /* ZBDownloaderManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZBDownloaderManager.m; sourceTree = "<group>"; };
+		E066C8B020108731004758F2 /* NSString+ZB.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+ZB.h"; sourceTree = "<group>"; };
+		E066C8B120108731004758F2 /* NSString+ZB.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+ZB.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +91,10 @@
 				E0485134200DD1B6008D6865 /* ZBDownloader.m */,
 				E0485136200DD809008D6865 /* ZBFileTool.h */,
 				E0485137200DD809008D6865 /* ZBFileTool.m */,
+				E066C8AD20107D3B004758F2 /* ZBDownloaderManager.h */,
+				E066C8AE20107D3B004758F2 /* ZBDownloaderManager.m */,
+				E066C8B020108731004758F2 /* NSString+ZB.h */,
+				E066C8B120108731004758F2 /* NSString+ZB.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -162,7 +172,9 @@
 			files = (
 				E0485135200DD1B6008D6865 /* ZBDownloader.m in Sources */,
 				E0485138200DD809008D6865 /* ZBFileTool.m in Sources */,
+				E066C8AF20107D3B004758F2 /* ZBDownloaderManager.m in Sources */,
 				E0485121200DA861008D6865 /* ViewController.m in Sources */,
+				E066C8B220108731004758F2 /* NSString+ZB.m in Sources */,
 				E048512C200DA861008D6865 /* main.m in Sources */,
 				E048511E200DA861008D6865 /* AppDelegate.m in Sources */,
 			);
