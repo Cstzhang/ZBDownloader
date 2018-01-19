@@ -9,12 +9,11 @@
 #import <Foundation/Foundation.h>
 
 @interface ZBFileTool : NSObject
++ (BOOL)isExistsWithFile: (NSString *)filePath;
 
-+ (BOOL)fileExists:(NSString *)filePath;
++ (long long)fileSizeWithPath: (NSString *)filePath;
 
-+ (long long)fileSize:(NSString *)filePath;
++ (void)moveFile: (NSString *)fromPath toFile: (NSString *)toPath;
 
-+ (void)moveFile:(NSString *)fromPath toPath:(NSString *)toPath;
-
-+ (void)removeFile:(NSString *)filePath;
++ (void)removeFileAtPath: (NSString *)filePath;
 @end

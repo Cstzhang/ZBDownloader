@@ -10,6 +10,6 @@
 
 @interface NSString (ZB)
 
-- (NSString *)md5;
+- (NSString *)MD5Str;
 
 @end

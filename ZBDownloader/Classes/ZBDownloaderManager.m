@@ -10,9 +10,7 @@
 #import "NSString+ZB.h"
 @interface ZBDownloaderManager ()<NSCopying,NSMutableCopying>
 
-/** 下载器字典（每一个url一个下载器） */
-@property (nonatomic,strong) NSMutableDictionary *downloadInfo;
-
+@property (nonatomic, strong) NSMutableDictionary <NSString *, ZBDownloader *>*downLoaderDic;
 @end
 
 
@@ -48,80 +46,87 @@ static ZBDownloaderManager *_shareInstance;
 }
 
 
-
-// key md5(url) value ZBDownloader
--(NSMutableDictionary *)downloadInfo{
-    if (!_downloadInfo) {
-        _downloadInfo = [[NSMutableDictionary alloc]init];
+- (NSMutableDictionary *)downLoaderDic {
+    if (!_downLoaderDic) {
+        _downLoaderDic = [NSMutableDictionary dictionary];
     }
-    return _downloadInfo;
+    return _downLoaderDic;
 }
 
-- (void)dowbloader:(NSURL *)url
-      downloadInfo:(DownloadInfoBlockType)downloadInfoBlock
-          progress:(ProgressBlockType)progressBlock
-           success:(SuccessBlockType)successBlock
-            failed:(FailedBlockType)failedBlock{
-    //1 url
-    NSString *urlMD5 = [url.absoluteString md5];
-    //2 根据urlMD5 查找下载器
-    ZBDownloader *downloader = self.downloadInfo[urlMD5];
-    if (downloader == nil) {
-        downloader = [[ZBDownloader alloc]init];
-        self.downloadInfo[urlMD5] = downloader;
+- (ZBDownloader *)getDownLoaderWithURL: (NSURL *)url {
+    NSString *md5Name = [url.absoluteString MD5Str];
+    ZBDownloader *downLoader = self.downLoaderDic[md5Name];
+    return downLoader;
+}
+
+- (ZBDownloader *)downLoadWithURL: (NSURL *)url
+                          fileInfo:(DownloadInfoBlockType)downLoadInfoBlcok
+                           success:(SuccessBlockType)successBlock
+                              fail:(FailedBlockType)failBlock
+                          progress:(ProgressBlockType)progressBlock
+                             state:(StateChangeBlockType)stateBlock {
+    
+    NSString *md5Name = [url.absoluteString MD5Str];
+    ZBDownloader *downLoader = self.downLoaderDic[md5Name];
+    if (downLoader == nil) {
+        downLoader = [[ZBDownloader alloc] init];
+        [self.downLoaderDic setValue:downLoader forKey:md5Name];
     }
-    [downloader dowbloader:url downloadInfo:downloadInfoBlock progress:progressBlock success:^(NSString *cacheFilePath) {
-        //拦截block
-        [self.downloadInfo removeObjectForKey:urlMD5];
-        successBlock(cacheFilePath);
-    } failed:^{
-        failedBlock();
-    }];
-    //下载完成后要移除下载器
+    __weak typeof(self) weakSelf = self;
+    [downLoader downLoadWithURL:url fileInfo:downLoadInfoBlcok progress:progressBlock state:stateBlock success:^(NSString *cachePath, long long totalFileSize) {
+        if (successBlock) {
+            successBlock(cachePath, totalFileSize);
+        }
+        [weakSelf.downLoaderDic removeObjectForKey:md5Name];
+    } fail:failBlock];
     
-    
+    return downLoader;
 }
 
-- (void)pauseWithURL:(NSURL *)url{
-    //1 url
-    NSString *urlMD5 = [url.absoluteString md5];
-    //2 根据urlMD5 查找下载器
-    ZBDownloader *downloader = self.downloadInfo[urlMD5];
+- (void)pauseWithURL: (NSURL *)url {
     
-    [downloader pauseCurrentTask];
+    NSString *md5Name = [url.absoluteString MD5Str];
+    ZBDownloader *downLoader = self.downLoaderDic[md5Name];
+    [downLoader pause];
     
 }
 
-- (void)cancelWithURL:(NSURL *)url{
-    //1 url
-    NSString *urlMD5 = [url.absoluteString md5];
-    //2 根据urlMD5 查找下载器
-    ZBDownloader *downloader = self.downloadInfo[urlMD5];
+
+- (void)resumeWithURL: (NSURL *)url {
+    NSString *md5Name = [url.absoluteString MD5Str];
+    ZBDownloader *downLoader = self.downLoaderDic[md5Name];
+    [downLoader resume];
+}
+
+
+- (void)cancelWithURL: (NSURL *)url {
+    NSString *md5Name = [url.absoluteString MD5Str];
+    ZBDownloader *downLoader = self.downLoaderDic[md5Name];
+    [downLoader cancel];
+}
+
+
+- (void)cancelAndClearCacheWithURL: (NSURL *)url {
+    NSString *md5Name = [url.absoluteString MD5Str];
+    ZBDownloader *downLoader = self.downLoaderDic[md5Name];
+    [downLoader cancelAndClearCache];
     
-    [downloader cancelCurrentTask];
 }
 
-- (void)resumeWithURL:(NSURL *)url{
-    //1 url
-    NSString *urlMD5 = [url.absoluteString md5];
-    //2 根据urlMD5 查找下载器
-    ZBDownloader *downloader = self.downloadInfo[urlMD5];
+- (void)pauseAll {
     
-    [downloader resumeCurrentTask];
+    [[self.downLoaderDic allValues] makeObjectsPerformSelector:@selector(pause)];
+    
+}
+
+- (void)resumeAll {
+    
+    [[self.downLoaderDic allValues] makeObjectsPerformSelector:@selector(resume)];
+    
 }
 
 
-- (void)pauseAll{
-    [self.downloadInfo.allValues performSelector:@selector(pauseCurrentTask) withObject:nil];
-}
 
-- (void)resumeAll{
-    [self.downloadInfo.allValues performSelector:@selector(resumeCurrentTask) withObject:nil];
-}
-
-- (void)cancelAll{
-    [self.downloadInfo.allValues performSelector:@selector(cancelCurrentTask) withObject:nil];
-}
 
 
 @end

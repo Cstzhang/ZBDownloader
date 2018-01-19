@@ -10,32 +10,41 @@
 
 @implementation ZBFileTool
 
-+ (BOOL)fileExists:(NSString *)filePath{
-    if (filePath.length == 0) {
-        return NO;
-    }
-    return [[NSFileManager defaultManager] fileExistsAtPath:filePath];
++ (BOOL)isExistsWithFile: (NSString *)filePath {
+    
+    BOOL result = [[NSFileManager defaultManager] fileExistsAtPath:filePath];
+    return result;
 }
 
-+ (long long)fileSize:(NSString *)filePath{
-    if (![self fileExists:filePath]) {
++ (long long)fileSizeWithPath: (NSString *)filePath {
+    
+    // 如果路径不存在, 返回0
+    if (![self isExistsWithFile:filePath]) {
         return 0;
     }
-    NSDictionary *fileInfo = [[NSFileManager defaultManager] attributesOfItemAtPath:filePath error:nil];
-    return [fileInfo[NSFileSize] longLongValue];
+    
+    NSDictionary *fileInfoDic = [[NSFileManager defaultManager] attributesOfItemAtPath:filePath error:nil];
+    long long fileSize = [fileInfoDic[NSFileSize] longLongValue];
+    return fileSize;
 }
 
-+ (void)moveFile:(NSString *)fromPath toPath:(NSString *)toPath{
-    if (![self fileExists:fromPath]) {
-        return ;
+
++ (void)moveFile: (NSString *)fromPath toFile: (NSString *)toPath {
+    // 如果路径不存在, 返回0
+    if (![self isExistsWithFile:fromPath]) {
+        return;
     }
     [[NSFileManager defaultManager] moveItemAtPath:fromPath toPath:toPath error:nil];
+    
 }
 
-+ (void)removeFile:(NSString *)filePath{
-    if (![self fileExists:filePath]) {
-        return ;
++ (void)removeFileAtPath: (NSString *)filePath {
+    // 如果路径不存在, 返回0
+    if (![self isExistsWithFile:filePath]) {
+        return;
     }
     [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+    
 }
+
 @end

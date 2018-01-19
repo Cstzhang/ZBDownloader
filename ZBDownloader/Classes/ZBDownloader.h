@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 
 typedef NS_ENUM(NSUInteger,ZBDownLoaderState){
-    ZBDownLoaderStateUnKnown,
     /** 下载暂停 */
     ZBDownLoaderStatePause,
     /** 正在下载 */
@@ -20,64 +19,58 @@ typedef NS_ENUM(NSUInteger,ZBDownLoaderState){
     ZBDownLoaderStateFailed
 };
 
-typedef void(^DownloadInfoBlockType)(long long totalSize);
+typedef void(^DownloadInfoBlockType)(long long totalFileSize);
 typedef void(^ProgressBlockType)(float progress);
-typedef void(^SuccessBlockType)(NSString *cacheFilePath);
-typedef void(^FailedBlockType)(void);
+typedef void(^SuccessBlockType)(NSString *cachePath,long long totalFileSize);
+typedef void(^FailedBlockType)(NSString *errorMsg);
 typedef void(^StateChangeBlockType)(ZBDownLoaderState state);
 
 //一个下载器对应一个下载任务 一个 dowbloader->url
 @interface ZBDownloader : NSObject
-/**
- 下载文件
- 
- @param url 文件url
- */
-- (void)dowbloader:(NSURL *)url ;
-/**
- 下载文件
 
- @param url 文件url
- */
-- (void)dowbloader:(NSURL *)url
-      downloadInfo:(DownloadInfoBlockType)downloadInfoBlock
-          progress:(ProgressBlockType)progressBlock
-           success:(SuccessBlockType)successBlock
-            failed:(FailedBlockType)failedBlock;
-
-/**
- 暂停
- */
-- (void)pauseCurrentTask;
-
-/**
- 取消任务
- */
-- (void)cancelCurrentTask;
-
-/**
- 取消并清除缓存
- */
-- (void)cancelTaskAndCleanCache;
-
-/**
- 恢复继续下载状态 (调用了几次暂停,就需要调用几次继续才可以继续)
- */
-- (void)resumeCurrentTask;
-
-/// 数据部分
-
-/**
- 下载状态
- */
+// 当前文件的下载状态
 @property (nonatomic,assign,readonly) ZBDownLoaderState state;
+// 当前文件的下载进度
 @property (nonatomic,assign,readonly) float progress;
-/// 事件&数据
-@property (nonatomic,copy) DownloadInfoBlockType downloadInfoBlock;
-@property (nonatomic,copy) StateChangeBlockType stateChange;
-@property (nonatomic,copy) ProgressBlockType progressChange;
+
+/** 文件下载信息的block */
+@property (nonatomic,copy) DownloadInfoBlockType downLoadInfoBlcok;
+/** 状态改变的block */
+@property (nonatomic,copy) StateChangeBlockType stateChangeBlcok;
+/** 进度改变的block */
+@property (nonatomic,copy) ProgressBlockType progressBlock;
+/** 下载成功的block */
 @property (nonatomic,copy) SuccessBlockType successBlock;
-@property (nonatomic,copy) FailedBlockType failedBlock;
+/** 下载失败的block */
+@property (nonatomic,copy) FailedBlockType failBlock;
+
+// 根据url查找对应缓存, 如果不存在, 则返回nil
++ (NSString *)cachePathWithURL: (NSURL *)url;
++ (long long)tmpCacheSizeWithURL: (NSURL *)url;
++ (void)clearCacheWithURL: (NSURL *)url;
+
+// 根据url地址, 进行下载
+- (void)downLoadWithURL:(NSURL *)url ;
+- (void)downLoadWithURL:(NSURL *)url
+               fileInfo:(DownloadInfoBlockType)downLoadInfoBlcok
+               progress:(ProgressBlockType)progressBlock
+                  state:(StateChangeBlockType)stateBlock
+                success:(SuccessBlockType)successBlock
+                   fail:(FailedBlockType)failBlock;
+
+// 继续
+- (void)resume;
+
+// 暂停
+- (void)pause;
+
+// 取消
+- (void)cancel;
+
+// 取消下载, 并删除缓存
+- (void)cancelAndClearCache;
+
+
 
 
 

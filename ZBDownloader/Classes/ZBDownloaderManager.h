@@ -12,23 +12,27 @@
 
 + (instancetype)shareInstance;
 
-- (void)dowbloader:(NSURL *)url
-      downloadInfo:(DownloadInfoBlockType)downloadInfoBlock
-          progress:(ProgressBlockType)progressBlock
-           success:(SuccessBlockType)successBlock
-            failed:(FailedBlockType)failedBlock;
+- (ZBDownloader *)getDownLoaderWithURL: (NSURL *)url;
 
-- (void)pauseWithURL:(NSURL *)url;
+- (ZBDownloader *)downLoadWithURL: (NSURL *)url
+                          fileInfo:(DownloadInfoBlockType)downLoadInfoBlcok
+                           success:(SuccessBlockType)successBlock
+                              fail:(FailedBlockType)failBlock
+                          progress:(ProgressBlockType)progressBlock
+                             state:(StateChangeBlockType)stateBlock;
 
-- (void)cancelWithURL:(NSURL *)url;
+- (void)pauseWithURL: (NSURL *)url;
 
-- (void)resumeWithURL:(NSURL *)url;
+- (void)resumeWithURL: (NSURL *)url;
+
+- (void)cancelWithURL: (NSURL *)url;
+
+- (void)cancelAndClearCacheWithURL: (NSURL *)url;
 
 - (void)pauseAll;
 
 - (void)resumeAll;
 
-- (void)cancelAll;
 
 
 @end

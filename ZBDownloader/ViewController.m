@@ -48,40 +48,37 @@
 
 
 - (IBAction)download:(id)sender { 
-    NSURL * url = [NSURL URLWithString:@"https://codeload.github.com/Cstzhang/Leetcode/zip/master"];
+    NSURL * url = [NSURL URLWithString:@"https://codeload.github.com/Cstzhang/HXJTG/zip/master"];
 //    NSURL * url2 = [NSURL URLWithString:@"https://codeload.github.com/Cstzhang/Leetcode/zip/Release"];
-    [[ZBDownloaderManager shareInstance] dowbloader:url downloadInfo:^(long long totalSize) {
-       NSLog(@"下载信息 %lld",totalSize);
+    [[ZBDownloaderManager shareInstance] downLoadWithURL:url fileInfo:^(long long totalFileSize) {
+        NSLog(@" totalFileSize : %lld",totalFileSize);
+    } success:^(NSString *cachePath, long long totalFileSize) {
+        NSLog(@" cachePath : %@  totalFileSize %lld",cachePath,totalFileSize);
+    } fail:^(NSString *errorMsg) {
+        NSLog(@" errorMsg %@",errorMsg);
     } progress:^(float progress) {
-         NSLog(@"下载进度 %f",progress);
-    } success:^(NSString *cacheFilePath) {
-          NSLog(@"下载成功 %@",cacheFilePath);
-    } failed:^{
-          NSLog(@"下载失败");
+        NSLog(@" progress %f",progress);
+    } state:^(ZBDownLoaderState state) {
+        NSLog(@" state %lu",(unsigned long)state);
     }];
-    
-//    [[ZBDownloaderManager shareInstance] dowbloader:url2 downloadInfo:^(long long totalSize) {
-//        NSLog(@"下载信息 %lld",totalSize);
-//    } progress:^(float progress) {
-//        NSLog(@"下载进度 %f",progress);
-//    } success:^(NSString *cacheFilePath) {
-//        NSLog(@"下载成功 %@",cacheFilePath);
-//    } failed:^{
-//        NSLog(@"下载失败");
-//    }];
-    
+
     
     
 }
 - (IBAction)pause:(id)sender {
-    [self.downloader pauseCurrentTask];
+    NSURL * url = [NSURL URLWithString:@"https://codeload.github.com/Cstzhang/HXJTG/zip/master"];
+    [[ZBDownloaderManager shareInstance] pauseWithURL:url];
 }
 - (IBAction)cancel:(id)sender {
-    [self.downloader cancelCurrentTask];
+    
+    NSURL * url = [NSURL URLWithString:@"https://codeload.github.com/Cstzhang/HXJTG/zip/master"];
+   [[ZBDownloaderManager shareInstance] cancelWithURL:url];
 }
 
 - (IBAction)cancelClean:(id)sender {
-    [self.downloader cancelTaskAndCleanCache];
+    
+    NSURL * url = [NSURL URLWithString:@"https://codeload.github.com/Cstzhang/HXJTG/zip/master"];
+    [[ZBDownloaderManager shareInstance] cancelAndClearCacheWithURL:url];
     
 }
 
